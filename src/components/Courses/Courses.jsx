@@ -104,6 +104,7 @@ const Courses = () => {
 			return !props;
 		});
 	};
+
 	const handleInput = (e) => {
 		setInputs((prev) => {
 			return { ...prev, [e.target.name]: e.target.value };
@@ -111,13 +112,9 @@ const Courses = () => {
 	};
 
 	const createAuthor = () => {
-		// setAuthors((prev) => {
-		// 	return [...prev, { id: Date.now(), name: inputs.name }];
-		// });
-		mockedAuthorsList.push({ id: Date.now(), name: inputs.name });
-		console.log(mockedAuthorsList);
-		setAuthors(mockedAuthorsList);
-		console.log(authors);
+		setAuthors((prev) => {
+			return [...prev, { id: Date.now(), name: inputs.name }];
+		});
 	};
 	const addAuthor = (id) => {
 		setAuthors((prev) => {
