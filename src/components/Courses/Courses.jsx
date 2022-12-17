@@ -10,6 +10,8 @@ import { mockedCoursesList, mockedAuthorsList } from '../../constants';
 import { convertDuration } from '../../helpers/pipeDuration';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
+import { v4 as uuidv4 } from 'uuid';
+import { getDate } from '../../helpers/getDate';
 
 const Container = styled.div`
 	width: 90%;
@@ -80,62 +82,100 @@ const Courses = () => {
 	const [courses, setCourses] = useState(mockedCoursesList);
 	const [isAddClicked, setIsAddClicked] = useState(false);
 
-	const [inputs, setInputs] = useState({ duration: 0 });
+	const [inputs, setInputs] = useState({});
 	const [authors, setAuthors] = useState(mockedAuthorsList);
-
+	const [changedAuthors, setChangedAuthors] = useState(authors);
 	const [courseAuthors, setCourseAuthors] = useState([]);
-
-	const [data, setData] = useState({
-		id: '',
-		title: '',
-		description: '',
-		creationDate: '',
-		duration: 0,
-		authors: '',
-	});
 
 	const handleAddCourse = () => {
 		setIsAddClicked((props) => {
 			return !props;
 		});
+		setInputs({});
+		setChangedAuthors(authors);
+		setCourseAuthors([]);
+	};
+	const updateMockedAuthors = () => {
+		authors.map((el) => {
+			if (el.id !== mockedAuthorsList.id) {
+				mockedAuthorsList.push(el);
+			}
+		});
 	};
 	const handleCreateCourse = () => {
-		setIsAddClicked((props) => {
-			return !props;
-		});
+		if (
+			inputs.title &&
+			inputs.description &&
+			inputs.duration &&
+			courseAuthors
+		) {
+			updateMockedAuthors();
+			setIsAddClicked((props) => {
+				return !props;
+			});
+
+			setCourses((prev) => {
+				return [
+					...prev,
+					{
+						id: uuidv4(),
+						title: inputs.title,
+						description: inputs.description,
+						creationDate: getDate(),
+						duration: inputs.duration,
+						authors: courseAuthors,
+					},
+				];
+			});
+		} else {
+			alert('Please, fill all fields');
+		}
 	};
 
 	const handleInput = (e) => {
 		setInputs((prev) => {
+			if (
+				(e.target.name === 'duration' && isNaN(e.target.value)) ||
+				e.target.value <= 0
+			) {
+				e.target.value = '';
+				e.target.placeholder = 'Wrong input';
+			}
 			return { ...prev, [e.target.name]: e.target.value };
 		});
 	};
 
 	const createAuthor = () => {
 		setAuthors((prev) => {
-			return [...prev, { id: Date.now(), name: inputs.name }];
+			return [...prev, { id: uuidv4(), name: inputs.name }];
 		});
 	};
+
+	useEffect(() => {
+		setChangedAuthors(authors);
+	}, [authors]);
+
 	const addAuthor = (id) => {
-		setAuthors((prev) => {
+		setChangedAuthors((prev) => {
 			return prev.filter((el) => el.id !== id);
 		});
 		setCourseAuthors((prev) => {
 			return [...prev, id];
 		});
 	};
-
-	const findAuthorName = (id) => {
-		console.log(authors);
-		let k = mockedAuthorsList.find((el) => el.id === id);
-		return k.name;
+	const delCourseAuthor = (id) => {
+		setChangedAuthors((prev) => {
+			return [...prev, authors.find((el) => el.id === id)];
+		});
+		setCourseAuthors((prev) => {
+			return prev.filter((el) => el !== id);
+		});
 	};
 
-	useEffect(() => {
-		console.log(inputs);
-		// console.log(courseAuthors);
-		console.log(authors);
-	}, [inputs, authors]);
+	const findAuthorName = (id) => {
+		let k = authors.find((el) => el.id === id).name;
+		return k;
+	};
 
 	return (
 		<Container>
@@ -184,7 +224,7 @@ const Courses = () => {
 						<ItemContainer>
 							<Title>Authors</Title>
 							<List>
-								{authors.map((author) => (
+								{changedAuthors.map((author) => (
 									<AuthorItem key={author.id}>
 										<AuthorName>{author.name}</AuthorName>
 										<Button
@@ -203,6 +243,7 @@ const Courses = () => {
 									placeholderText={'Enter duration in minute...'}
 									name={'duration'}
 									onChange={handleInput}
+									value={inputs.duration}
 								/>
 							</ItemInput>
 							<Duration>
@@ -218,9 +259,10 @@ const Courses = () => {
 								) : (
 									courseAuthors.map((authorID) => (
 										<AuthorItem key={authorID}>
+											{/* <AuthorName>{authorID}</AuthorName> */}
 											<AuthorName>{findAuthorName(authorID)}</AuthorName>
 											<Button
-												onClick={() => addAuthor(authorID)}
+												onClick={() => delCourseAuthor(authorID)}
 												buttonText={'Delete author'}
 											/>
 										</AuthorItem>
