@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import styled from 'styled-components';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import Textarea from '../../common/Textarea/Textarea';
@@ -12,71 +11,6 @@ import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import { v4 as uuidv4 } from 'uuid';
 import { getDate } from '../../helpers/getDate';
-
-const Container = styled.div`
-	width: 90%;
-	margin: 0px auto;
-`;
-const TopContainer = styled.div`
-	margin-bottom: 20px;
-`;
-const TopRowContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: last baseline;
-	height: 50px;
-	margin-bottom: 10px;
-`;
-const TitleContainer = styled.div`
-	width: 200px;
-`;
-const AuthorContainer = styled.div`
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: repeat(2, 30vh);
-	row-gap: 10px;
-	column-gap: 30px;
-	border: 1px solid black;
-	padding: 30px 15px;
-`;
-const ItemContainer = styled.div`
-	background-color: red;
-	padding: 10px;
-`;
-const Title = styled.h2`
-	text-align: center;
-	line-height: 0;
-`;
-const ItemInput = styled.div`
-	padding-right: 30px;
-	margin-bottom: 15px;
-`;
-const BtnContainer = styled.div`
-	display: flex;
-	justify-content: center;
-`;
-const Duration = styled.p`
-	font-size: 22px;
-	line-height: 0;
-	margin-top: 40px;
-	& span {
-		font-weight: 700;
-	}
-`;
-const List = styled.ul`
-	width: 80%;
-	height: 70%;
-	list-style-type: none;
-	overflow-y: scroll;
-`;
-const AuthorItem = styled.li`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-`;
-const AuthorName = styled.p`
-	line-height: 0;
-`;
 
 const Courses = () => {
 	const [courses, setCourses] = useState(mockedCoursesList);
@@ -178,114 +112,157 @@ const Courses = () => {
 	};
 
 	return (
-		<Container>
-			{isAddClicked ? (
-				<>
-					<TopContainer>
-						<TopRowContainer>
-							<TitleContainer>
-								<Input
-									labelText={'Title'}
-									placeholderText={'Enter title...'}
-									name={'title'}
-									onChange={handleInput}
-									value={inputs.title}
+		<div className='h-screen pt-16 '>
+			<div className='pb-5 bg-white px-2 rounded shadow-lg shadow-gray-300/60'>
+				{isAddClicked ? (
+					<div>
+						<div className='mb-4'>
+							<div className='flex justify-between items-center h-16 mb-2'>
+								<div className='w-80'>
+									<Input
+										labelText={'Title'}
+										placeholderText={'Enter title...'}
+										name={'title'}
+										onChange={handleInput}
+										value={inputs.title}
+									/>
+								</div>
+								<Button
+									onClick={handleCreateCourse}
+									buttonText={'Create course'}
 								/>
-							</TitleContainer>
-							<Button
-								onClick={handleCreateCourse}
-								buttonText={'Create course'}
+							</div>
+							<Textarea
+								labelText={'Description'}
+								placeholderText={'Enter description'}
+								name={'description'}
+								onChange={handleInput}
+								value={inputs.description}
 							/>
-						</TopRowContainer>
-						<Textarea
-							labelText={'Description'}
-							placeholderText={'Enter description'}
-							name={'description'}
-							onChange={handleInput}
-							value={inputs.description}
-						/>
-					</TopContainer>
-					<AuthorContainer>
-						<ItemContainer>
-							<Title>Add author</Title>
-							<ItemInput>
-								<Input
-									labelText={'Author name'}
-									placeholderText={'Enter author name...'}
-									name={'name'}
-									onChange={handleInput}
-									value={inputs.name}
-								/>
-							</ItemInput>
-							<BtnContainer>
-								<Button onClick={createAuthor} buttonText={'Create author'} />
-							</BtnContainer>
-						</ItemContainer>
-						<ItemContainer>
-							<Title>Authors</Title>
-							<List>
-								{changedAuthors.map((author) => (
-									<AuthorItem key={author.id}>
-										<AuthorName>{author.name}</AuthorName>
-										<Button
-											onClick={() => addAuthor(author.id)}
-											buttonText={'Add author'}
-										/>
-									</AuthorItem>
-								))}
-							</List>
-						</ItemContainer>
-						<ItemContainer>
-							<Title>Duration</Title>
-							<ItemInput>
-								<Input
-									labelText={'Duration'}
-									placeholderText={'Enter duration in minute...'}
-									name={'duration'}
-									onChange={handleInput}
-									value={inputs.duration}
-								/>
-							</ItemInput>
-							<Duration>
-								Duration: <span>{convertDuration(inputs.duration)}</span>
-								hours
-							</Duration>
-						</ItemContainer>
-						<ItemContainer>
-							<Title>Course authors</Title>
-							<List>
-								{courseAuthors.length === 0 ? (
-									<h3>Author list is empty</h3>
-								) : (
-									courseAuthors.map((authorID) => (
-										<AuthorItem key={authorID}>
-											{/* <AuthorName>{authorID}</AuthorName> */}
-											<AuthorName>{findAuthorName(authorID)}</AuthorName>
+						</div>
+						<div
+							className='grid rounded-lg 
+						grid-cols-2 grid-rows-2 
+						gap-x-10 gap-y-5 px-5 py-5
+						bg-slate-200
+						shadow-lg shadow-gray-300/50
+						transition-all duration-200'
+						>
+							<div
+								className='p-5
+							bg-slate-50 rounded-lg
+							shadow-lg shadow-gray-500/30'
+							>
+								<h2 className='text-center mb-2 font-bold'>Add author</h2>
+								<div className='mb-4 w-3/4'>
+									<Input
+										labelText={'Author name'}
+										placeholderText={'Enter author name...'}
+										name={'name'}
+										onChange={handleInput}
+										value={inputs.name}
+									/>
+								</div>
+								<div className='flex justify-center'>
+									<Button onClick={createAuthor} buttonText={'Create author'} />
+								</div>
+							</div>
+							<div
+								className='p-5
+							bg-slate-50 rounded-lg
+							shadow-lg shadow-gray-500/30'
+							>
+								<h2 className='text-center mb-2 font-bold'>Authors</h2>
+								<ul className='w-full h-44 overflow-y-scroll'>
+									{changedAuthors.map((author) => (
+										<li
+											key={author.id}
+											className='flex justify-between items-center mb-2'
+										>
+											<p>{author.name}</p>
 											<Button
-												onClick={() => delCourseAuthor(authorID)}
-												buttonText={'Delete author'}
+												onClick={() => addAuthor(author.id)}
+												buttonText={'Add author'}
 											/>
-										</AuthorItem>
-									))
-								)}
-							</List>
-						</ItemContainer>
-					</AuthorContainer>
-				</>
-			) : (
-				<>
-					<TopContainer>
-						<TopRowContainer>
-							<SearchBar setCourses={setCourses} courses={mockedCoursesList} />
-							<Button onClick={handleAddCourse} buttonText={'Add new course'} />
-						</TopRowContainer>
-					</TopContainer>
-					{courses.map((el) => (
-						<CourseCard key={el.id} data={el} authorsList={mockedAuthorsList} />
-					))}
-				</>
-			)}
-		</Container>
+										</li>
+									))}
+								</ul>
+							</div>
+							<div
+								className='p-5
+							bg-slate-50 rounded-lg
+							shadow-lg shadow-gray-500/30'
+							>
+								<h2 className='text-center mb-2 font-bold'>Duration</h2>
+								<div className='mb-5 w-1/2'>
+									<Input
+										labelText={'Duration'}
+										placeholderText={'Enter duration in minute...'}
+										name={'duration'}
+										onChange={handleInput}
+										value={inputs.duration}
+									/>
+								</div>
+								<p className='text-xl'>
+									Duration:{' '}
+									<span className='font-bold'>
+										{convertDuration(inputs.duration)}
+									</span>
+									hours
+								</p>
+							</div>
+							<div
+								className='p-5
+							bg-slate-50 rounded-lg
+							shadow-lg shadow-gray-500/30'
+							>
+								<h2 className='text-center mb-2 font-bold'>Course authors</h2>
+								<ul className='w-full h-44 overflow-y-scroll'>
+									{courseAuthors.length === 0 ? (
+										<h3>Author list is empty</h3>
+									) : (
+										courseAuthors.map((authorID) => (
+											<li
+												key={authorID}
+												className='flex justify-between items-center mb-2'
+											>
+												<p>{findAuthorName(authorID)}</p>
+												<Button
+													onClick={() => delCourseAuthor(authorID)}
+													buttonText={'Delete author'}
+												/>
+											</li>
+										))
+									)}
+								</ul>
+							</div>
+						</div>
+					</div>
+				) : (
+					<div className='h-full'>
+						<div className=''>
+							<div className='flex justify-between items-center h-16 mb-2'>
+								<SearchBar
+									setCourses={setCourses}
+									courses={mockedCoursesList}
+								/>
+								<Button
+									onClick={handleAddCourse}
+									buttonText={'Add new course'}
+								/>
+							</div>
+						</div>
+						{courses.map((el) => (
+							<CourseCard
+								key={el.id}
+								data={el}
+								authorsList={mockedAuthorsList}
+							/>
+						))}
+					</div>
+				)}
+			</div>
+		</div>
 	);
 };
 

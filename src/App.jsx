@@ -4,10 +4,11 @@ import Header from './components/Header/Header';
 
 function App() {
 	return (
-		<div>
+		<div className='bg-slate-50'>
 			<Header />
-			<Courses />
-			<div>React</div>
+			<div className='w-4/5 mx-auto'>
+				<Courses />
+			</div>
 		</div>
 	);
 }

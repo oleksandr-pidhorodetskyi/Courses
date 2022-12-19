@@ -1,32 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
+
 import Logo from './components/Logo/Logo';
 import Button from '../../common/Button/Button';
-const Container = styled.div`
-	display: flex;
-	height: 10vh;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.199);
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 5px;
-`;
-const SmLeftContainer = styled.div`
-	display: flex;
-	margin-right: 20px;
-	align-items: center;
-`;
-const UserName = styled.h3`
-	margin-right: 20px;
-`;
+
 const Header = () => {
 	return (
-		<Container>
+		<div
+			className='absolute inset-0 w-screen flex h-14
+		border-b-2 border-gray justify-between items-center px-4'
+		>
 			<Logo />
-			<SmLeftContainer>
-				<UserName>Vasya</UserName>
+			<div className='flex items-center'>
+				<h3 className='mr-5'>Vasya</h3>
 				<Button buttonText='Logout'></Button>
-			</SmLeftContainer>
-		</Container>
+			</div>
+		</div>
 	);
 };
 

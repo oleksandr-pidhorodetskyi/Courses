@@ -1,18 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
-const Btn = styled.button`
-	padding: 5px 25px;
-	height: 30px;
-	background-color: transparent;
-	border: 1px solid purple;
-	&:hover {
-		background-color: #d9d4e22c;
-	}
-	&:active {
-		background-color: #bfb0db2c;
-	}
-`;
+
 const Button = ({ buttonText, onClick }) => (
-	<Btn onClick={onClick}>{buttonText}</Btn>
+	<button
+		className='flex h-10 px-5 items-center justify-center 
+		rounded-lg border-solid border-2 border-emerald-500  
+		bg-gradient-to-r from-cyan-100 to-blue-100 
+		text-slate-800 hover:text-slate-500 active:text-slate-700
+		transition-all duration-200
+		'
+		onClick={onClick}
+	>
+		{buttonText}
+	</button>
 );
 export default Button;
